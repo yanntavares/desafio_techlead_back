@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RoomStatus {
+  RESERVED
+  AVAILABLE
+  REMOVED
+}
+
+enum ReservationStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELED
+}
+
+model User {
+  id            String            @id @default(uuid())
+  name          String
+  email         String            @unique
+  password      String
+  role          Role              @default(USER)
+  status        UserStatus        @default(ACTIVE)
+  reservations  Reservation[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model Room {
+  id            String            @id @default(uuid())
+  name          String            @unique
+  capacity      Int
+  description   String?
+  status        RoomStatus       @default(AVAILABLE)
+  reservations  Reservation[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model Reservation {
+  id            String            @id @default(uuid())
+  user          User              @relation(fields: [userId], references: [id])
+  userId        String
+  room          Room              @relation(fields: [roomId], references: [id])
+  roomId        String
+  startDateTime DateTime
+  endDateTime   DateTime
+  status        ReservationStatus @default(SCHEDULED)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model RevokedToken {
+  jti       String   @id
+  expiresAt DateTime
+}
