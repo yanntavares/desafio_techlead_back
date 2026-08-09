@@ -11,12 +11,20 @@ import {
   ApiDocDeleteUser,
   ApiDocFindAllUsers,
   ApiDocFindOneUser,
+  ApiDocFindUsersFavoritesRooms,
+  ApiDocFindUsersReservations,
   ApiDocUpdateUser,
 } from './user.swagger';
+import { ReservationService } from 'src/reservation/reservation.service';
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly reservationService: ReservationService,
+    private readonly favoriteService: FavoritesService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, RoleGuard)
@@ -42,8 +50,16 @@ export class UserController {
 
   @Get(':id/reservations')
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiDocFindUsersReservations()
   findUsersReservations(@Param('id') id: string) {
-    return this.userService.findUsersReservation(id);
+    return this.reservationService.findUsersReservation(id);
+  }
+
+  @Get(':id/favorites')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiDocFindUsersFavoritesRooms()
+  findUsersFavoritesRooms(@Param('id') id: string) {
+    return this.favoriteService.findUsersFavorites(id);
   }
 
   @Patch(':id')

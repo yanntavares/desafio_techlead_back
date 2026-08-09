@@ -134,6 +134,43 @@ export function ApiDocFindUsersReservations() {
   );
 }
 
+export function ApiDocFindUsersFavoritesRooms() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Retorna as salas favoritas do usuário',
+      description: 'Retorna uma lista com as salas favoritas do usuário com base no ID',
+    }),
+    ApiParam({
+      name: 'id',
+      description: 'Id do usuário',
+      required: true,
+      schema: {
+        type: 'string',
+      },
+    }),
+    ApiResponse({
+      status: 201,
+      description: 'Lista de favoritos retornada com sucesso',
+      schema: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            userId: { type: 'string', description: 'Id do usuário' },
+            roomId: { type: 'string', description: 'Id da sala' },
+            createdAt: { type: 'string', format: 'date-time', description: 'Data de criação' },
+            updatedAt: { type: 'string', format: 'date-time', description: 'Data de atualização' },
+          },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 500,
+      description: 'Erro interno do servidor',
+    }),
+  );
+}
+
 export function ApiDocUpdateUser() {
   return applyDecorators(
     ApiOperation({
