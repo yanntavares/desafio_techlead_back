@@ -43,6 +43,7 @@ model User {
   role          Role              @default(USER)
   status        UserStatus        @default(ACTIVE)
   reservations  Reservation[]
+  favorites     FavoriteRoom[]
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
 }
@@ -54,6 +55,7 @@ model Room {
   description   String?
   status        RoomStatus       @default(AVAILABLE)
   reservations  Reservation[]
+  favoritedBy   FavoriteRoom[]
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
 }
@@ -71,7 +73,17 @@ model Reservation {
   updatedAt     DateTime          @updatedAt
 }
 
+model FavoriteRoom {
+  @@id([userId, roomId])
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  room          Room            @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId        String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
 model RevokedToken {
-  jti       String   @id
-  expiresAt DateTime
+  jti           String            @id @default(uuid())
+  expiresAt     DateTime
 }
