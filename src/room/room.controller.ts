@@ -15,10 +15,14 @@ import {
   ApiDocFindOneRoom,
   ApiDocUpdateRoom,
 } from './room.swagger';
+import { ReservationService } from 'src/reservation/reservation.service';
 
 @Controller('room')
 export class RoomController {
-  constructor(private readonly roomService: RoomService) {}
+  constructor(
+    private readonly roomService: RoomService,
+    private readonly reservationService: ReservationService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, RoleGuard)
@@ -54,7 +58,7 @@ export class RoomController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiDocFindRoomReservations()
   findRoomReservations(@Param('id') id: string) {
-    return this.roomService.findRoomReservations(id);
+    return this.reservationService.findRoomReservations(id);
   }
 
   @Patch(':id')

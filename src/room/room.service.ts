@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Room, Reservation } from 'src/generated/prisma/client';
+import { Room } from 'src/generated/prisma/client';
 
 @Injectable()
 export class RoomService {
@@ -70,11 +70,5 @@ export class RoomService {
     ]);
 
     return room;
-  }
-
-  async findRoomReservations(id: string): Promise<Reservation[]> {
-    return await this.prisma.reservation.findMany({
-      where: { roomId: id },
-    });
   }
 }

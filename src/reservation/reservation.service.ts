@@ -62,6 +62,18 @@ export class ReservationService {
     return reservation;
   }
 
+  async findUsersReservation(id: string): Promise<Reservation[]> {
+    return this.prisma.reservation.findMany({
+      where: { userId: id },
+    });
+  }
+
+  async findRoomReservations(id: string): Promise<Reservation[]> {
+    return await this.prisma.reservation.findMany({
+      where: { roomId: id },
+    });
+  }
+
   async update(id: string, updateReservationDto: UpdateReservationDto): Promise<Reservation> {
     await this.findOne(id);
 
