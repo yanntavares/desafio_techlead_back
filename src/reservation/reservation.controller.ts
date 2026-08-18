@@ -7,13 +7,14 @@ import { RoleGuard } from 'src/common/guards/roles.guard';
 import { Role } from 'src/generated/prisma/enums';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import {
+  ApiDocCompleteReservation,
+  ApiDocCountReservations,
   ApiDocCreateReservation,
   ApiDocDeleteReservation,
   ApiDocFindAllReservation,
   ApiDocFindOneReservation,
   ApiDocUpdateReservation,
 } from './reservation.swagger';
-import { ApiDocCountRooms } from 'src/room/room.swagger';
 
 @Controller('reservation')
 export class ReservationController {
@@ -36,7 +37,7 @@ export class ReservationController {
 
   @Get('count')
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @ApiDocCountRooms()
+  @ApiDocCountReservations()
   countReservations() {
     return this.reservationService.getNumberOfReservations();
   }
@@ -65,6 +66,7 @@ export class ReservationController {
 
   @Patch(':id/complete')
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiDocCompleteReservation()
   complete(@Param('id') id: string) {
     return this.reservationService.complete(id);
   }

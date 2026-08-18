@@ -7,6 +7,7 @@ import { RoleGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import { Role } from 'src/generated/prisma/enums';
 import {
+  ApiDocActivateRoom,
   ApiDocCreateRoom,
   ApiDocDeleteRoom,
   ApiDocFindActiveRoom,
@@ -89,6 +90,7 @@ export class RoomController {
   @Patch(':id/activate')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN)
+  @ApiDocActivateRoom()
   active(@Param('id') id: string) {
     return this.roomService.activate(id);
   }

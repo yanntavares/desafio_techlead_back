@@ -254,6 +254,47 @@ export function ApiDocFindActiveRoom() {
   );
 }
 
+export function ApiDocActivateRoom() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Ativa uma sala',
+      description: 'Torna o status da sala como disponível',
+    }),
+    ApiParam({
+      name: 'id',
+      description: 'Id da sala',
+      required: true,
+      schema: {
+        type: 'string',
+      },
+    }),
+    ApiResponse({
+      status: 200,
+      description: 'Sala ativada com sucesso',
+      schema: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', description: 'Id da sala' },
+          name: { type: 'string', description: 'Nome da sala' },
+          capacity: { type: 'number', description: 'Capacidade da sala' },
+          description: { type: 'string', description: 'Descrição da sala ' },
+          status: { type: 'string', description: 'Status da sala' },
+          createdAt: { type: 'string', format: 'date-time', description: 'Data de criação' },
+          updatedAt: { type: 'string', format: 'date-time', description: 'Data de atualização' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'Sala não encontrada',
+    }),
+    ApiResponse({
+      status: 500,
+      description: 'Erro interno do servidor',
+    }),
+  );
+}
+
 export function ApiDocCountRooms() {
   return applyDecorators(
     ApiOperation({

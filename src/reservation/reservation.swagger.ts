@@ -195,6 +195,48 @@ export function ApiDocDeleteReservation() {
   );
 }
 
+export function ApiDocCompleteReservation() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Completa uma reserva',
+      description: 'Torna o status da reserva como concluída',
+    }),
+    ApiParam({
+      name: 'id',
+      description: 'Id da reserva',
+      required: true,
+      schema: {
+        type: 'string',
+      },
+    }),
+    ApiResponse({
+      status: 200,
+      description: 'Reserva concluída com sucesso',
+      schema: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', description: 'Id da reserva' },
+          userId: { type: 'string', description: 'Id do usuário' },
+          roomId: { type: 'string', description: 'Id da sala' },
+          startDateTime: { type: 'string', format: 'date-time', description: 'Data de início' },
+          endDateTime: { type: 'string', format: 'date-time', description: 'Data de término' },
+          status: { type: 'string', description: 'Status da reserva' },
+          createdAt: { type: 'string', format: 'date-time', description: 'Data de criação' },
+          updatedAt: { type: 'string', format: 'date-time', description: 'Data de atualização' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'Reserva não encontrada',
+    }),
+    ApiResponse({
+      status: 500,
+      description: 'Erro interno do servidor',
+    }),
+  );
+}
+
 export function ApiDocCountReservations() {
   return applyDecorators(
     ApiOperation({
