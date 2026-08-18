@@ -43,6 +43,10 @@ export class UserService {
     return user;
   }
 
+  async getNumberOfActiveUsers(): Promise<number> {
+    return await this.prisma.user.count();
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto): Promise<SafeUser> {
     await this.findOne(id);
 

@@ -243,3 +243,25 @@ export function ApiDocDeleteUser() {
     }),
   );
 }
+
+export function ApiDocCountUsers() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Retorna o número de usuários',
+    }),
+    ApiResponse({
+      status: 200,
+      description: 'Número de usuários retornado com sucesso',
+      schema: {
+        type: 'object',
+        properties: {
+          users: { type: 'number', description: 'Número de Usuários' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 500,
+      description: 'Erro interno do servidor',
+    }),
+  );
+}

@@ -253,3 +253,25 @@ export function ApiDocFindActiveRoom() {
     }),
   );
 }
+
+export function ApiDocCountRooms() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Retorna o número de salas',
+    }),
+    ApiResponse({
+      status: 200,
+      description: 'Número de salas retornado com sucesso',
+      schema: {
+        type: 'object',
+        properties: {
+          users: { type: 'number', description: 'Número de Salas' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 500,
+      description: 'Erro interno do servidor',
+    }),
+  );
+}

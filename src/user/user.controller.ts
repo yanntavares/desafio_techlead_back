@@ -7,6 +7,7 @@ import { RoleGuard } from 'src/common/guards/roles.guard';
 import { Role } from 'src/generated/prisma/enums';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import {
+  ApiDocCountUsers,
   ApiDocCreateUser,
   ApiDocDeleteUser,
   ApiDocFindAllUsers,
@@ -27,7 +28,6 @@ export class UserController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiDocCreateUser()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -39,6 +39,14 @@ export class UserController {
   @ApiDocFindAllUsers()
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Get('count')
+  @ApiDocCountUsers()
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.ADMIN)
+  countUsers() {
+    return this.userService.getNumberOfActiveUsers();
   }
 
   @Get(':id')

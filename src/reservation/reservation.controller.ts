@@ -13,6 +13,7 @@ import {
   ApiDocFindOneReservation,
   ApiDocUpdateReservation,
 } from './reservation.swagger';
+import { ApiDocCountRooms } from 'src/room/room.swagger';
 
 @Controller('reservation')
 export class ReservationController {
@@ -31,6 +32,13 @@ export class ReservationController {
   @ApiDocFindAllReservation()
   findAll() {
     return this.reservationService.findAll();
+  }
+
+  @Get('count')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiDocCountRooms()
+  countReservations() {
+    return this.reservationService.getNumberOfReservations();
   }
 
   @Get(':id')
@@ -53,5 +61,11 @@ export class ReservationController {
   @ApiDocDeleteReservation()
   remove(@Param('id') id: string) {
     return this.reservationService.remove(id);
+  }
+
+  @Patch(':id/complete')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  complete(@Param('id') id: string) {
+    return this.reservationService.complete(id);
   }
 }

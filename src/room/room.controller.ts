@@ -14,6 +14,7 @@ import {
   ApiDocFindRoomReservations,
   ApiDocFindOneRoom,
   ApiDocUpdateRoom,
+  ApiDocCountRooms,
 } from './room.swagger';
 import { ReservationService } from 'src/reservation/reservation.service';
 
@@ -44,7 +45,15 @@ export class RoomController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiDocFindActiveRoom()
   getActiveClasses() {
-    return this.roomService.findActiveClasses();
+    return this.roomService.findActiveRooms();
+  }
+
+  @Get('count')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.ADMIN)
+  @ApiDocCountRooms()
+  countRooms() {
+    return this.roomService.getNumberOfRooms();
   }
 
   @Get(':id')
@@ -75,5 +84,12 @@ export class RoomController {
   @ApiDocDeleteRoom()
   remove(@Param('id') id: string) {
     return this.roomService.remove(id);
+  }
+
+  @Patch(':id/activate')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.ADMIN)
+  active(@Param('id') id: string) {
+    return this.roomService.activate(id);
   }
 }

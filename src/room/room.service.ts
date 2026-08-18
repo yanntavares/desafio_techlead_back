@@ -38,7 +38,11 @@ export class RoomService {
     return room;
   }
 
-  async findActiveClasses(): Promise<Room[]> {
+  async getNumberOfRooms(): Promise<number> {
+    return await this.prisma.room.count();
+  }
+
+  async findActiveRooms(): Promise<Room[]> {
     return await this.prisma.room.findMany({
       where: {
         OR: [{ status: { equals: 'AVAILABLE' } }, { status: { equals: 'RESERVED' } }],
@@ -68,6 +72,17 @@ export class RoomService {
         data: { status: 'CANCELED' },
       }),
     ]);
+
+    return room;
+  }
+
+  async activate(id: string): Promise<Room> {
+    await this.findOne(id);
+
+    const room = await this.prisma.room.update({
+      where: { id },
+      data: { status: 'AVAILABLE' },
+    });
 
     return room;
   }

@@ -74,6 +74,12 @@ export class ReservationService {
     });
   }
 
+  async getNumberOfReservations(): Promise<number> {
+    return await this.prisma.reservation.count({
+      where: { status: 'SCHEDULED' },
+    });
+  }
+
   async update(id: string, updateReservationDto: UpdateReservationDto): Promise<Reservation> {
     await this.findOne(id);
 
@@ -89,6 +95,15 @@ export class ReservationService {
     return this.prisma.reservation.update({
       where: { id },
       data: { status: 'CANCELED' },
+    });
+  }
+
+  async complete(id: string): Promise<Reservation> {
+    await this.findOne(id);
+
+    return this.prisma.reservation.update({
+      where: { id },
+      data: { status: 'COMPLETED' },
     });
   }
 }

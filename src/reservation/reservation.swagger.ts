@@ -194,3 +194,25 @@ export function ApiDocDeleteReservation() {
     }),
   );
 }
+
+export function ApiDocCountReservations() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Retorna o número de Reservas',
+    }),
+    ApiResponse({
+      status: 200,
+      description: 'Número de reservas retornado com sucesso',
+      schema: {
+        type: 'object',
+        properties: {
+          users: { type: 'number', description: 'Número de Reservas' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 500,
+      description: 'Erro interno do servidor',
+    }),
+  );
+}
