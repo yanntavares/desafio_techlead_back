@@ -63,7 +63,11 @@ function takeUniqueCombinations(a: string[], b: string[], n: number): [string, s
 }
 
 function randomFutureStart(): Date {
-  return new Date(Date.now() + randomInt(1, 60) * 24 * 60 * 60 * 1000);
+  const date = new Date(Date.now() + randomInt(1, 60) * 24 * 60 * 60 * 1000);
+  // ponytail: hora cheia para bater com o grid de disponibilidade do front (SLOT_HOURS 6..18),
+  // igual ao que o RoomDetailsModal salva quando o usuário reserva pela UI.
+  date.setHours(randomInt(6, 18), 0, 0, 0);
+  return date;
 }
 
 async function main() {
