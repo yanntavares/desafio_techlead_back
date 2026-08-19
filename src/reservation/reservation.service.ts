@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Reservation } from 'src/generated/prisma/client';
+import type { Reservation } from 'src/generated/prisma/client';
 
 @Injectable()
 export class ReservationService {
@@ -12,10 +12,10 @@ export class ReservationService {
     const isConflicting = await this.prisma.reservation.findFirst({
       where: {
         startDateTime: {
-          lte: createReservationDto.endDateTime,
+          lt: createReservationDto.endDateTime,
         },
         endDateTime: {
-          gte: createReservationDto.startDateTime,
+          gt: createReservationDto.startDateTime,
         },
         status: 'SCHEDULED',
         roomId: createReservationDto.roomId,
