@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TokenService } from 'src/token/token.service';
@@ -13,6 +13,10 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.prisma.user.findUnique({ where: { email: loginDto.email } });
+
+    if (user?.status === 'INACTIVE') {
+      throw new NotFoundException('Usuário não encontrado');
+    }
 
     if (!user || !(await verifyPassword(loginDto.password, user.password))) {
       throw new UnauthorizedException('Email ou senha inválidos');
